@@ -1,4 +1,4 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzGHq2UpoPjBwbNzA9mDUkim5P16q8yXTLlTCAgN6EG2bKqFwrzUiZkXx7POY6CSLA62A/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyhkhLmQ8DqD489j28gtILot5DL8mJulojNRnpE6ZPKbuRtB1tfz_pSQKjHNjx36Aj7/exec";
 
 // 1. 페이지가 열리면 저장된 몬스터 불러오기
 window.onload = function() {
