@@ -1,9 +1,164 @@
-function doGet() {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  var data = sheet.getDataRange().getValues();
-  var result = [];
-  for (var i = 1; i < data.length; i++) {
-    result.push({ name: data[i][0], type: data[i][1], desc: data[i][2] });
-  }
-  return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
+/* 기본 배경 및 폰트 */
+body { 
+    background-color: #f4f1ea; 
+    font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; 
+    padding: 20px; 
+    color: #333; 
+    margin: 0;
 }
+
+h1 { 
+    text-align: center; 
+    color: #4a3c31; 
+    border-bottom: 2px solid #4a3c31; 
+    padding-bottom: 10px; 
+}
+
+/* 입력 폼 디자인 */
+#input-form { 
+    max-width: 850px; 
+    margin: 0 auto 40px auto; 
+    padding: 20px; 
+    background: #fff; 
+    border: 1px solid #ccc; 
+    border-radius: 8px; 
+}
+
+.input-row { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 8px; 
+    margin-bottom: 10px; 
+}
+
+#input-form input { 
+    flex: 1; 
+    min-width: 100px; 
+    padding: 8px; 
+    border: 1px solid #ddd; 
+    border-radius: 4px; 
+}
+
+#input-form textarea { 
+    width: 100%; 
+    height: 60px; 
+    margin-bottom: 10px; 
+    padding: 8px; 
+    border: 1px solid #ddd; 
+    border-radius: 4px; 
+    box-sizing: border-box;
+}
+
+button { 
+    background: #4a3c31; 
+    color: white; 
+    border: none; 
+    padding: 10px 25px; 
+    cursor: pointer; 
+    border-radius: 4px; 
+    font-weight: bold; 
+}
+
+button:hover { background: #6b5746; }
+
+/* 몬스터 도감 카드 컨테이너 */
+.monster-container { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    gap: 50px; 
+}
+
+/* 몬스터 카드 메인 레이아웃 (Grid) */
+.monster-card {
+    width: 100%;
+    max-width: 850px;
+    background: #fff;
+    border: 2px solid #333;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    grid-template-areas: 
+        "left-col top-grid"
+        "left-col mid-grid"
+        "attack attack"
+        "skill skill"
+        "desc desc";
+    box-shadow: 8px 8px 0px rgba(0,0,0,0.1);
+}
+
+/* 공통 셀 설정 */
+.cell { 
+    border: 0.5px solid #ccc; 
+    padding: 8px; 
+}
+
+.label-bg { 
+    background: #e0e0e0; 
+    font-weight: bold; 
+    font-size: 0.75rem; 
+    padding: 2px 6px; 
+    display: inline-block; 
+    margin-bottom: 4px;
+}
+
+.value { font-size: 0.9rem; }
+
+/* 왼쪽 열 (이름, 이미지, 드롭) */
+.left-col { 
+    grid-area: left-col; 
+    border-right: 2px solid #333; 
+    display: flex; 
+    flex-direction: column; 
+}
+
+.name-box { 
+    background: #333; 
+    color: #fff; 
+    padding: 15px; 
+    text-align: center; 
+    font-size: 1.25rem; 
+    font-weight: bold; 
+}
+
+.img-box { 
+    flex-grow: 1; 
+    min-height: 250px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    border-bottom: 1px solid #ccc;
+    background: #fafafa;
+}
+
+.img-box img { max-width: 100%; height: auto; display: block; }
+
+.drop-box { min-height: 120px; }
+
+/* 오른쪽 스탯 그리드 */
+.top-grid { 
+    grid-area: top-grid; 
+    display: grid; 
+    grid-template-columns: repeat(5, 1fr); 
+}
+
+.mid-grid { 
+    grid-area: mid-grid; 
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr); 
+    border-top: 1px solid #333; 
+}
+
+/* 하단 텍스트 구역 (내용에 따라 자동 확장) */
+.wide-area { 
+    padding: 15px; 
+    border-top: 1px solid #333; 
+    min-height: 60px; 
+    height: auto; 
+    white-space: pre-wrap; 
+    line-height: 1.6;
+    word-break: break-all;
+}
+
+.attack-area { grid-area: attack; background: #fff; }
+.skill-area { grid-area: skill; background: #fdfdfd; }
+.desc-area { grid-area: desc; background: #fff; font-style: italic; }

@@ -3,25 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>우리들의 몬스터 도감</title>
+    <title>RPG 몬스터 도감</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>👾 몬스터 도감</h1>
 
-    <div id="input-box">
-        <input type="text" id="monster-name" placeholder="이름 (예: 피카츄)">
-        <input type="text" id="monster-type" placeholder="속성 (예: 전기)">
-        <input type="text" id="monster-desc" placeholder="특징 (예: 귀여움)">
-        <button onclick="addMonster()">도감에 등록</button>
+    <h1>👾 몬스터 도감 시스템</h1>
+
+    <div id="input-form">
+        <h3>새 몬스터 등록</h3>
+        <div class="input-row">
+            <input type="text" id="m-name" placeholder="이름">
+            <input type="text" id="m-img" placeholder="이미지 URL">
+            <input type="text" id="m-category" placeholder="분류">
+            <input type="text" id="m-attr" placeholder="속성">
+            <input type="text" id="m-level" placeholder="레벨">
+        </div>
+        <div class="input-row">
+            <input type="text" id="m-identify" placeholder="식별치">
+            <input type="text" id="m-judge" placeholder="판정">
+            <input type="text" id="m-hp" placeholder="HP">
+            <input type="text" id="m-mp" placeholder="MP">
+            <input type="text" id="m-avoid" placeholder="회피">
+        </div>
+        <div class="input-row">
+            <input type="text" id="m-def" placeholder="방어">
+            <input type="text" id="m-act" placeholder="행동">
+            <input type="text" id="m-move" placeholder="이동">
+            <input type="text" id="m-str" placeholder="근력">
+            <input type="text" id="m-dex" placeholder="재주">
+        </div>
+        <div class="input-row">
+            <input type="text" id="m-agi" placeholder="민첩">
+            <input type="text" id="m-int" placeholder="지력">
+            <input type="text" id="m-per" placeholder="감지">
+            <input type="text" id="m-wis" placeholder="정신">
+            <input type="text" id="m-luk" placeholder="행운">
+        </div>
+        <div class="input-row">
+            <input type="text" id="m-dropItem" placeholder="드롭 아이템 (기본)">
+            <input type="text" id="m-dropTable" placeholder="드롭 테이블 (상세)">
+        </div>
+        <textarea id="m-attack" placeholder="공격 (줄바꿈 가능)"></textarea>
+        <textarea id="m-skill" placeholder="에너미 스킬 (줄바꿈 가능)"></textarea>
+        <textarea id="m-desc" placeholder="해설 (줄바꿈 가능)"></textarea>
+        
+        <div style="text-align: right;">
+            <button onclick="addMonster()">도감에 등록하기</button>
+        </div>
     </div>
 
     <hr>
 
-    <div id="monster-list">
-        <p>몬스터를 불러오는 중...</p>
+    <div class="monster-container" id="monster-list">
+        <p>데이터를 불러오는 중...</p>
     </div>
 
-    <script src="app.js"></script>
+    <script>
+        // 본인의 구글 앱스 스크립트 배포 URL을 여기에 넣으세요
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzeObmyGpyqbby6Dl1ej7lqO7GqGe8NCO4_jpqgcFjgU66uKuNsrDkK_xALinde8QeT/exec";
+
+        // 데이터 로드
+        window.onload = function() {
+            fetch(SCRIPT_URL)
+                .then(res => res.json())
+                .then(data => {
+                    const list = document.getElementById('monster-list');
+                    list.innerHTML = ""; 
+                    
+                    data.forEach(m => {
+                        list.innerHTML += `
+                        <div class="monster-card">
+                            <div class="left-col">
+                                <div class="name-box">${m.name}</div>
+                                <div class="img-box">
+                                    <img src="${m.img || 'https://via.placeholder.com/250x250?text=No+Image'}" alt="monster">
+                                </div>
+                                <div class="cell drop-box">
+                                    <span class="label-bg">드롭 아이템</span><br>
+                                    <span class="value">${m.dropItem || '-'}</span>
+                                    <div style="margin-top:10px;">
+                                        <span class="label-bg">드롭 테이블</span><br>
+                                        <span class="value" style="font-size:0.8em">${m.dropTable || '-'}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="top-grid">
+                                <div class="cell"><span class="label-bg">분류</span><div class="value">${m.category}</div></div>
+                                <div class="cell"><span class="label-bg">속성</span><div class="value">${m.attr}</div></div>
+                                <div class="cell"><span class="label-bg">레벨</span><div class="value">${m.level}</div></div>
+                                <div class="cell"><span class="label-bg">식별치</span><div class="value">${m.identify}</div></div>
+                                <div class="cell"><span class="label-bg">판정</span><div class="value">${m.judge}</div></div>
+                                <div class="cell"><span class="label-bg">HP</span><div class="value">${m.hp}</div></div>
+                                <div class="cell"><span class="label-bg">MP</span><div class="value">${m.mp}</div></div>
+                                <div class="cell"><span class="label-bg">회피</span><div class="value">${m.avoid}</div></div>
+                                <div class="cell"><span class="label-bg">방어</span><div class="value">${m.def}</div></div>
+                                <div class="cell"><span class="label-bg">행동</span><div class="value">${m.act}</div></div>
+                            </div>
+
+                            <div class="mid-grid">
+                                <div class="cell"><span class="label-bg">근력</span><div class="value">${m.str}</div></div>
+                                <div class="cell"><span class="label-bg">재주</span><div class="value">${m.dex}</div></div>
+                                <div class="cell"><span class="label-bg">민첩</span><div class="value">${m.agi}</div></div>
+                                <div class="cell"><span class="label-bg">지력</span><div class="value">${m.int}</div></div>
+                                <div class="cell"><span class="label-bg">감지</span><div class="value">${m.per}</div></div>
+                                <div class="cell"><span class="label-bg">정신</span><div class="value">${m.wis}</div></div>
+                                <div class="cell"><span class="label-bg">행운</span><div class="value">${m.luk}</div></div>
+                                <div class="cell"><span class="label-bg">이동</span><div class="value">${m.move}</div></div>
+                            </div>
+
+                            <div class="wide-area attack-area">
+                                <span class="label-bg">공격</span><br>${m.attack || '-'}
+                            </div>
+                            <div class="wide-area skill-area">
+                                <span class="label-bg">에너미 스킬</span><br>${m.skill || '-'}
+                            </div>
+                            <div class="wide-area desc-area">
+                                <span class="label-bg">해설</span><br>${m.desc || '-'}
+                            </div>
+                        </div>
+                        `;
+                    });
+                });
+        };
+
+        // 데이터 추가
+        function addMonster() {
+            const monsterData = {
+                name: document.getElementById('m-name').value,
+                img: document.getElementById('m-img').value,
+                category: document.getElementById('m-category').value,
+                attr: document.getElementById('m-attr').value,
+                level: document.getElementById('m-level').value,
+                identify: document.getElementById('m-identify').value,
+                judge: document.getElementById('m-judge').value,
+                hp: document.getElementById('m-hp').value,
+                mp: document.getElementById('m-mp').value,
+                avoid: document.getElementById('m-avoid').value,
+                def: document.getElementById('m-def').value,
+                act: document.getElementById('m-act').value,
+                move: document.getElementById('m-move').value,
+                str: document.getElementById('m-str').value,
+                dex: document.getElementById('m-dex').value,
+                agi: document.getElementById('m-agi').value,
+                int: document.getElementById('m-int').value,
+                per: document.getElementById('m-per').value,
+                wis: document.getElementById('m-wis').value,
+                luk: document.getElementById('m-luk').value,
+                dropItem: document.getElementById('m-dropItem').value,
+                dropTable: document.getElementById('m-dropTable').value,
+                attack: document.getElementById('m-attack').value,
+                skill: document.getElementById('m-skill').value,
+                desc: document.getElementById('m-desc').value
+            };
+
+            fetch(SCRIPT_URL, {
+                method: "POST",
+                body: JSON.stringify(monsterData)
+            }).then(() => {
+                alert("기록 완료!");
+                location.reload();
+            });
+        }
+    </script>
 </body>
 </html>
