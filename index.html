@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>우리들의 몬스터 도감</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>👾 몬스터 도감</h1>
+
+    <div id="input-box">
+        <input type="text" id="monster-name" placeholder="이름 (예: 피카츄)">
+        <input type="text" id="monster-type" placeholder="속성 (예: 전기)">
+        <input type="text" id="monster-desc" placeholder="특징 (예: 귀여움)">
+        <button onclick="addMonster()">도감에 등록</button>
+    </div>
+
+    <hr>
+
+    <div id="monster-list">
+        <p>몬스터를 불러오는 중...</p>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
